@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include "receive.h"
 
-#define TIMEOUT 3000
+#define TIMEOUT 30000
 
 int file_write(const char* filename, uint8_t *buffer, int bytes) { 
     FILE *file = fopen(filename, "a+");
@@ -76,7 +76,7 @@ int receive(
         uint8_t content[default_len + 1];
         
         int data_length, data_start;
-        char *data = "DATA", data_str[5]; // 5 bc DATA plus space key
+        char data[] = "DATA", data_str[5];
 
         sscanf(
             (char *)buffer,
@@ -95,6 +95,7 @@ int receive(
         int i = 0;
         while (buffer[i] != '\n')
             i++;
+        i++;
 
         memmove(content, buffer + i, packet_len);
 

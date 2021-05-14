@@ -20,10 +20,10 @@ int main(int argc, char **argv) {
     struct in_addr ip_addr;
     int sockfd;
     struct sockaddr_in address;
-    int default_len = 1000;
-    const int packets_no = (size % default_len == 0 ? 0 : 1) + (size / default_len);
+    const int default_len = 1000;
+    int extra = size % default_len == 0 ? 0 : 1;
+    const int packets_no = (size / default_len) + extra;
     size_t addr_size = sizeof(address);
-
 
     if (
         (argc != 5) ||
@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
         return EXIT_FAILURE;
     }
 
-    // Just like we were shown at the lecture
+    // Just like we were shown at the lecture.
     bzero(&address, addr_size);
 
     address.sin_addr = ip_addr;
@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
             send_data(
                 size,
                 curr_start,
-                &default_len,
+                default_len,
                 sockfd,
                 &address,
                 addr_size
